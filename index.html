@@ -3,39 +3,70 @@
 
 <head>
   <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <title>Flickr API Test</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
   <link rel="stylesheet" href="main.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+
 </head>
 
 <body>
-  <div id="header">
-    <form class="search">
-      <input type="text" id="search_box" placeholder="検索">
-      <button type="submit" id="search_button">
+  <div id="app">
+    <div id="header">
+      <form class="search" v-on:submit.prevent="fetchSearchBooks">
+        <input type="search" id="search_box" placeholder="検索" v-model="searchText">
+        <button type="submit" id="search_button">
         <i class="fas fa-search"></i>
       </button>
-    </form>
-  </div>
-  
-  <div class="wrapper">
-  <div id="sidebar">
-    <div class="favorite">
-      お気に入り
+      </form>
+    </div>
+
+    <div class="wrapper">
+      <div id="sidebar">
+        <div class="favorite">
+          お気に入り
+        </div>
+      </div>
+
+      <div id="contents">
+        <div class="category">
+          <div class="category_title">
+            近日発売予定の本
+          </div>
+          <div class="all_category_card">
+            <div class="category_card" v-for="rs_book in rs_books">
+              <a v-bind:href="rs_book.url">
+                <div class="book_image">
+                <img v-bind:src="rs_book.image"></img>
+                </div>
+                <div class="book_price">&yen;{{rs_book.price}}</div>
+                <div class="book_title">{{rs_book.title}}</div>
+              </a>
+            </div>
+          </div>
+          <div class="category_title space">
+            注目のアイテム
+          </div>
+          <div class="all_category_card">
+            <div class="category_card" v-for="featured_book in featured_books">
+              <a v-bind:href="featured_book.url">
+                <div class="book_image">
+                <img v-bind:src="featured_book.image"></img>
+                </div>
+                <div class="book_price">&yen;{{featured_book.price}}</div>
+                <div class="book_title">{{featured_book.title}}</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  
-  <div id="content">
-    zaaa
-  </div>  
-  </div>
-  
- 
 
   <script src="main.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
