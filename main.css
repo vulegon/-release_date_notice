@@ -35,13 +35,17 @@
   display: flex;  
 }
 #sidebar{
-  width:250px;
+  min-width:200px;
   height: 100vh;
-  background-color: #AAAAAA;
   margin-right: 10px; 
+  overflow-y: auto;
+  border-right:2px solid rgb(221, 221, 221);
+  color: #444444;
 }
 .favorite{
-  padding:8px 24px;
+  padding:8px 10px;
+  font-family: "Arial";
+  cursor: pointer;
 }
 .category_title{
   font-size: 28px;
@@ -55,21 +59,31 @@
   width: 90vw;
 }
 .category_card{
+  width: 297px;
+  width: 198px;
   max-width: 297px;
   min-width: 198px;
-  height:404px;  
-  width: 224px;
   background-color: rgba(55,62,62,0.04);
-  margin-right: 5px;
   cursor: pointer;
+  position: relative;
+  margin-right: 5px;
+  margin-top: 5px;
 }
-li{
-  list-style: none;
+.mousehover_space{
+ position: absolute;
+ top:0;
+ right:-10px;
+ margin-left: 20px; 
+}
+.book_background{
+  width: 100%;
+  height: 60%;
+  background-color:rgba(55, 62, 62, 0.05);
 }
 .book_image{
   padding:10px 0;
   width: 90%;
-  height:60%;
+  height:100%;
   margin:0 auto;
   text-align: center;
 }
@@ -95,3 +109,56 @@ li{
 .space{
   margin-top: 30px;
 }
+.favorite_button{
+  width: 26px;
+  height: 26px;
+  background: #ffa500;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 25px;
+  position: absolute;
+  top:0px;
+  right:0px;
+  background-color: #00CCFF;
+  display: none;
+}
+.favorite_button.isShow{
+  display: block;
+}
+.star{
+  color:white;
+}
+.search_category_card{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width:auto;
+}
+.book_salesdate{
+  font-size:13px;
+}
+#favorite_list{
+  height: 80px;
+  width: 192px;
+  padding-left: 5px;
+  padding-right: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+#favorite_list_title{
+  font-size: 14px;
+}
+#delete_favorite{
+  font-size:20px;
+}
+.delete_button{
+  display: inline-block;
+  width: 15px;
+}
+.sidebar_icon{
+  margin-right: 10px
+}
+
+
