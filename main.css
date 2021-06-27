@@ -1,7 +1,6 @@
 #header{
     width: 100%;
     height:56px;
-    background-color: rgb(19,25,33);
 }
 .search{
     width:50%;
@@ -120,19 +119,14 @@
   position: absolute;
   top:0px;
   right:0px;
-  background-color: #1E90FF;
+  background-color: #00CCFF;
   display: none;
-  color:white;
 }
 .favorite_button.isShow{
   display: block;
 }
-.favorite_button.selected{
-  color:#FFCC66;
-  display: block;
-}
 .star{
-  /*color:white;*/
+  color:white;
 }
 .search_category_card{
   display: flex;
@@ -166,26 +160,5 @@
 .sidebar_icon{
   margin-right: 10px
 }
-.favorite_category_card{
-  height: 450px;
-  width: 198px;
-  max-width: 297px;
-  min-width: 198px;
-  background-color: rgba(55,62,62,0.04);
-  cursor: pointer;
-  position: relative;
-  margin-right: 5px;
-  margin-top: 5px;
-}
-.favorite_book_background{
-  width: 100%;
-  height: 51.7%;
-  background-color:rgba(55, 62, 62, 0.05);
-}
-.releasedate{
-   margin:0 auto;
-    text-align: center;
-}
-
 
 
