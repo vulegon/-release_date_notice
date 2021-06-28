@@ -5,15 +5,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Flickr API Test</title>
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="main.css">
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <script src="https://unpkg.com/vue-infinite-loading@^2/dist/vue-infinite-loading.js"></script>
+
 </head>
 
 <body>
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
 
   <div id="app">
     <div id="header">
@@ -27,8 +28,8 @@
 
     <div class="wrapper">
       <div id="sidebar">
-        <div class="favorite" v-on:click="homeWindowShow()"><i class="fas fa-home sidebar_icon"></i>ホーム</div>
-        <div class="favorite" v-on:click="favoriteListShow()"><i class="far fa-star sidebar_icon"></i>お気に入り</div>
+        <div class="favorite" v-on:click="homeWindowShow()"><i class="fas fa-home sidebar_icon"></i><span>ホーム</span></div>
+        <div class="favorite" v-on:click="favoriteListShow()"><i class="far fa-star sidebar_icon"></i><span>お気に入り</span></div>
         <div id="favorite_list" v-show="favorite_flag" v-for="(favorite_book,index) in favorite_books" v-bind:key="index">
           <div class="delete_button">
             <span id="delete_favorite" v-on:click="favoriteButtonDelete(index,favorite_book)">×</span>
@@ -44,92 +45,116 @@
             近日発売予定の本
           </div>
           <div class="all_category_card">
-            <div class="category_card" v-for="(rs_book,index) in rs_books" v-bind:key="index" v-on:mouseenter.self="favoriteButtonShow(index)" v-on:mouseleave.self="favoriteButtonHidden(index)">
+            <div class="category_card" v-for="(rs_book,index) in rs_books" v-bind:key="index" v-on:mouseenter.self="favoriteButtonShow(index,rs_book)" v-on:mouseleave.self="favoriteButtonHidden(index,rs_book)">
               <a v-bind:href="rs_book.url" target="_blank" rel="noopener noreferrer">
                 <div class="book_background">
                   <div class="book_image">
                     <img v-bind:src="rs_book.image"></img>
                   </div>
                 </div>
-                <div class="book_salesdate">{{rs_book.salesdate}}</div>
-                <div class="book_price">&yen;{{rs_book.price}}</div>
-                <div class="book_title">{{rs_book.title}}</div>
+                <div class="book_information">
+                  <div class="book_title">{{rs_book.title}}</div>
+                  <div class="book_price">&yen;{{rs_book.price}}</div>
+                  <div class="book_salesdate">発売日:{{rs_book.salesdate}}</div>
+                </div>
               </a>
-              <div class="favorite_button" v-bind:class="{isShow:index===selectIndex}" v-on:click="favoriteButtonClick(index,rs_book)">
-              <span class="fas fa-star star" v-bind:class="{selected:index===selectFavorite}"></span>
+              <div class="favorite_button" v-bind:class="{isShow:index===selectIndex,selected:index===selectFavorite[index]}" v-on:click="favoriteButtonClick(index,rs_book)">
+                <span class="fas fa-star star"></span>
               </div>
             </div>
           </div>
-          <!--<div class="category_title space">-->
-          <!--  注目のアイテム-->
-          <!--</div>-->
-          <!--<div class="all_category_card">-->
-          <!--  <div class="category_card" v-for="featured_book in featured_books">-->
-          <!--    <a v-bind:href="featured_book.url">-->
-          <!--      <div class="book_image">-->
-          <!--      <img v-bind:src="featured_book.image"></img>-->
-          <!--      </div>-->
-          <!--      <div class="book_price">&yen;{{featured_book.price}}</div>-->
-          <!--      <div class="book_title">{{featured_book.title}}</div>-->
-          <!--    </a>-->
-          <!--    <div class="favorite_button">-->
-          <!--    <span class="fas fa-star"></span>-->
-          <!--    </div>-->
-          <!--  </div>-->
-          <!--</div>-->
+
+
+          <div class="category_title space">
+            注目のアイテム
+          </div>
+          <div class="all_category_card">
+            <div class="category_card" v-for="(featured_book,index) in featured_books" v-bind:key="index" v-on:mouseenter.self="favoriteButtonShow(index,featured_book)" v-on:mouseleave.self="favoriteButtonHidden(index,featured_book)">
+              <a v-bind:href="featured_book.url" target="_blank" rel="noopener noreferrer">
+                <div class="book_background">
+                  <div class="book_image">
+                    <img v-bind:src="featured_book.image"></img>
+                  </div>
+                </div>
+                <div class="book_information">
+                  <div class="book_title">{{featured_book.title}}</div>
+                  <div class="book_price">&yen;{{featured_book.price}}</div>
+                  <div class="book_salesdate">発売日:{{featured_book.salesdate}}</div>
+                </div>
+
+              </a>
+              <div class="favorite_button" v-bind:class="{isShow:index===featured_selectIndex,selected:index===featured_selectFavorite[index]}" v-on:click="favoriteButtonClick(index,featured_book)">
+                <span class="fas fa-star star"></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      
+
+      <template>
      <div class="contents" v-show="searchFlag">
         <div class="category">
           <div class="category_title">
             検索結果
           </div>
           <div class="search_category_card">
-            <div class="category_card" v-for="(search_book,index) in search_books" v-bind:key="index" v-on:mouseenter.self="favoriteButtonShow(index)" v-on:mouseleave.self="favoriteButtonHidden(index)">
+            <div class="category_card" v-for="(search_book,index) in search_books" v-bind:key="index" v-on:mouseenter.self="favoriteButtonShow(index,search_book)" v-on:mouseleave.self="favoriteButtonHidden(index,search_book)">
               <a v-bind:href="search_book.url" target="_blank" rel="noopener noreferrer">
                 <div class="book_background">
                   <div class="book_image">
                     <img v-bind:src="search_book.image"></img>
                   </div>
                 </div>
-                <div class="book_salesdate">{{search_book.salesdate}}</div>
-                <div class="book_price">&yen;{{search_book.price}}</div>
-                <div class="book_title">{{search_book.title}}</div>
-              </a>
-              <div class="favorite_button" v-bind:class="{isShow:index===selectIndex}" v-on:click="favoriteButtonClick(index,search_book)">
-              <span class="fas fa-star star" v-bind:class="{selected:index===selectFavorite}"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="contents" v-show="favorite_listFlag">
-        <div class="category">
-          <div class="category_title">
-            お気に入り一覧
-          </div>
-          <div class="search_category_card">
-            <div class="category_card" v-for="(favorite_book,index) in favorite_books" v-bind:key="index" v-on:mouseenter.self="favoriteButtonShow(index)" v-on:mouseleave.self="favoriteButtonHidden(index)">
-              <a v-bind:href="favorite_book.url" target="_blank" rel="noopener noreferrer">
-                <div class="book_background">
-                  <div class="book_image">
-                    <img v-bind:src="favorite_book.image"></img>
+                  <div class="book_information">
+                    <div class="book_title">{{search_book.title}}</div>
+                    <div class="book_price">&yen;{{search_book.price}}</div>
+                    <div class="book_salesdate">発売日:{{search_book.salesdate}}</div>
                   </div>
-                </div>
-                <div class="book_salesdate">{{favorite_book.salesdate}}</div>
-                <div class="book_price">&yen;{{favorite_book.price}}</div>
-                <div class="book_title">{{favorite_book.title}}</div>
               </a>
-              <div class="favorite_button" v-bind:class="{isShow:index===selectIndex}" v-on:click="favoriteButtonClick(index,favorite_book)">
-              <span class="fas fa-star star" v-bind:class="{selected:index===selectFavorite}"></span>
+              <div class="favorite_button" v-bind:class="{isShow:index===selectIndex,selected:index===selectFavorite[index]}" v-on:click="favoriteButtonClick(index,search_book)">
+              <span class="fas fa-star star"></span>
+              </div>
+            </div>
+            <infinite-loading ref="infiniteLoading" spinner="spiral" @infinite="infiniteLoad" :identifier="infiniteId">
+               <span slot="no-more"></span>
+               <span slot="no-results"></span>
+            </infinite-loading>
+          </div>
+        </div>
+      </div>
+    </template>
+
+      <template>
+        <div class="contents" v-show="favorite_listFlag">
+          <div class="category">
+            <div class="category_title">
+              お気に入り一覧
+            </div>
+            <div class="search_category_card">
+              <div class="favorite_category_card" v-for="(favorite_book,index) in favorite_books" v-bind:key="index" v-on:mouseenter.self="favoriteButtonShow(index,favorite_book)" v-on:mouseleave.self="favoriteButtonHidden(index,favorite_book)">
+                <a v-bind:href="favorite_book.url" target="_blank" rel="noopener noreferrer">
+                  <div class="favorite_book_background">
+                    <div class="book_image">
+                      <img v-bind:src="favorite_book.image"></img>
+                    </div>
+                  </div>
+                  <div class="book_information">
+                    <div class="book_title">{{favorite_book.title}}</div>
+                    <div class="book_price">&yen;{{favorite_book.price}}</div>
+                    <div class="book_salesdate">発売日:{{favorite_book.salesdate}}</div>
+                    <div class="releasedate">{{favorite_book.ur_date}}</div>
+                  </div>
+                </a>
+                <div class="favorite_button isShow selected" v-on:click="favoriteButtonClick(index,favorite_book)">
+                <span class="fas fa-star star"></span>
+                </div>
+
               </div>
             </div>
           </div>
         </div>
-      </div>
-      
+      </template>
+
     </div>
   </div>
 
