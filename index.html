@@ -22,14 +22,14 @@
         <input type="search" id="search_box" placeholder="検索" v-model="searchText">
         <button type="submit" id="search_button">
         <i class="fas fa-search"></i>
-      </button>
+        </button>
       </form>
     </div>
 
     <div class="wrapper">
       <div id="sidebar">
-        <div class="favorite" v-on:click="homeWindowShow()"><i class="fas fa-home sidebar_icon"></i><span>ホーム</span></div>
-        <div class="favorite" v-on:click="favoriteListShow()"><i class="far fa-star sidebar_icon"></i><span>お気に入り</span></div>
+        <div class="favorite" v-on:click="homeWindowShow()" onclick=""><i class="fas fa-home sidebar_icon"></i><span>ホーム</span></div>
+        <div class="favorite" v-on:click="favoriteListShow()" onclick=""><i class="far fa-star sidebar_icon"></i><span>お気に入り</span></div>
         <div id="favorite_list" v-show="favorite_flag" v-for="(favorite_book,index) in favorite_books" v-bind:key="index">
           <div class="delete_button">
             <span id="delete_favorite" v-on:click="favoriteButtonDelete(index,favorite_book)">×</span>

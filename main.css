@@ -240,7 +240,7 @@ a:hover {
   }
   #sidebar {
   width: 100%;
-  height: 56px;
+  height: 70px;
   border-top: 2px solid rgb(221, 221, 221);
   color: #444444;
   position: fixed;/*←絶対位置*/
