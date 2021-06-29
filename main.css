@@ -10,6 +10,9 @@ a{
 a:hover {
   text-decoration: none;
 }
+#app{
+  overflow: hidden;
+}
 #search_icon {
   font-size: 17px;
   color: #AAAAAA;
