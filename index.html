@@ -19,10 +19,10 @@
   <div id="app">
     <div id="header">
       <form class="search" v-on:submit.prevent="fetchSearchBooks">
-        <input type="search" id="search_box" placeholder="検索" v-model="searchText">
+        <input type="text" id="search_box" placeholder="検索" v-model="searchText">
         <button type="submit" id="search_button">
         <i class="fas fa-search"></i>
-      </button>
+        </button>
       </form>
     </div>
 
